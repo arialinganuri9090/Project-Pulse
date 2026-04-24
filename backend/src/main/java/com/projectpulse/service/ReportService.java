@@ -32,7 +32,7 @@ public class ReportService {
         ActiveWeek week = activeWeekRepository.findById(weekId)
                 .orElseThrow(() -> new RuntimeException("Week not found"));
 
-        List<Team> teams = teamRepository.search(sectionId, null);
+        List<Team> teams = teamRepository.findBySectionId(sectionId);
         Set<User> allStudents = new LinkedHashSet<>();
         for (Team t : teams) allStudents.addAll(t.getStudents());
 

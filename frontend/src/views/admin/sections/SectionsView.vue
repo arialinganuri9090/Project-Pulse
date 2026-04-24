@@ -9,13 +9,21 @@
         <v-text-field v-model="search" label="Search by name" prepend-inner-icon="mdi-magnify" variant="outlined" density="compact" clearable @keyup.enter="loadSections" />
       </v-card-text>
     </v-card>
+    <v-alert v-if="error" type="error" class="mb-4">{{ error }}</v-alert>
     <v-card rounded="lg">
       <v-data-table :headers="headers" :items="sections" :loading="loading" item-value="id">
-        <template #item.startDate="{ item }">{{ item.startDate }}</template>
+        <template #item.name="{ item }">
+          <router-link :to="`/admin/sections/${item.id}`" style="text-decoration:none; color: inherit; font-weight: 500;">
+            {{ item.name }}
+          </router-link>
+        </template>
         <template #item.teams="{ item }">{{ item.teams?.length || 0 }} teams</template>
         <template #item.actions="{ item }">
           <v-btn icon="mdi-eye" variant="text" size="small" :to="`/admin/sections/${item.id}`" />
           <v-btn icon="mdi-pencil" variant="text" size="small" :to="`/admin/sections/${item.id}/edit`" />
+        </template>
+        <template #no-data>
+          <p class="text-medium-emphasis pa-4">No sections found. Create one using the button above.</p>
         </template>
       </v-data-table>
     </v-card>
@@ -28,6 +36,7 @@ import { sectionApi } from '@/api/index.js'
 
 const sections = ref([])
 const loading = ref(false)
+const error = ref('')
 const search = ref('')
 
 const headers = [
@@ -40,8 +49,14 @@ const headers = [
 
 async function loadSections() {
   loading.value = true
-  try { sections.value = (await sectionApi.list({ name: search.value || undefined })).data }
-  finally { loading.value = false }
+  error.value = ''
+  try {
+    sections.value = (await sectionApi.list({ name: search.value || undefined })).data
+  } catch (e) {
+    error.value = e.response?.data?.error || 'Failed to load sections. Check the backend is running.'
+  } finally {
+    loading.value = false
+  }
 }
 onMounted(loadSections)
 </script>

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TeamService {
@@ -51,7 +52,17 @@ public class TeamService {
     }
 
     public List<Team> searchTeams(Long sectionId, String name) {
-        return teamRepository.search(sectionId, name);
+        boolean hasSection = sectionId != null;
+        boolean hasName = name != null && !name.isBlank();
+        if (hasSection && hasName) return teamRepository.findBySectionIdAndNameContaining(sectionId, name);
+        if (hasSection) return teamRepository.findBySectionId(sectionId);
+        if (hasName) return teamRepository.findByNameContaining(name);
+        return teamRepository.findAllByOrderByNameAsc();
+    }
+
+    public Optional<Team> getTeamForStudent(Long studentId) {
+        List<Team> teams = teamRepository.findByStudentId(studentId);
+        return teams.isEmpty() ? Optional.empty() : Optional.of(teams.get(0));
     }
 
     public Team getTeam(Long id) {

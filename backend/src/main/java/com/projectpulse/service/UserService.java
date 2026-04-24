@@ -46,11 +46,19 @@ public class UserService {
     }
 
     public List<User> searchStudents(String firstName, String lastName, String email) {
-        return userRepository.searchByRole(Role.STUDENT, firstName, lastName, email);
+        String fn = firstName != null ? firstName : "";
+        String ln = lastName != null ? lastName : "";
+        String em = email != null ? email : "";
+        if (fn.isBlank() && ln.isBlank() && em.isBlank()) {
+            return userRepository.findByRoleOrderByLastNameAsc(Role.STUDENT);
+        }
+        return userRepository.searchByRole(Role.STUDENT, fn, ln, em);
     }
 
     public List<User> searchInstructors(String firstName, String lastName, UserStatus status) {
-        return userRepository.searchInstructors(Role.INSTRUCTOR, firstName, lastName, status);
+        String fn = firstName != null ? firstName : "";
+        String ln = lastName != null ? lastName : "";
+        return userRepository.searchInstructors(Role.INSTRUCTOR, fn, ln, status);
     }
 
     public User getUser(Long id) {

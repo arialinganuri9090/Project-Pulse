@@ -50,6 +50,7 @@ export const teamApi = {
   create: (data) => api.post('/teams', data),
   list: (params) => api.get('/teams', { params }),
   get: (id) => api.get(`/teams/${id}`),
+  myTeam: () => api.get('/teams/my-team'),
   update: (id, data) => api.put(`/teams/${id}`, data),
   delete: (id) => api.delete(`/teams/${id}`),
   assignStudents: (data) => api.post('/teams/assign-students', data),
@@ -62,7 +63,8 @@ export const studentApi = {
   list: (params) => api.get('/students', { params }),
   get: (id) => api.get(`/students/${id}`),
   delete: (id) => api.delete(`/students/${id}`),
-  invite: (data) => api.post('/students/invite', data)
+  invite: (data) => api.post('/students/invite', data),
+  updateMe: (data) => api.put('/students/me', data)
 }
 
 export const instructorApi = {

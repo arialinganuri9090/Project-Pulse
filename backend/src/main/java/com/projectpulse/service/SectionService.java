@@ -48,6 +48,9 @@ public class SectionService {
     }
 
     public List<Section> searchSections(String name) {
+        if (name == null || name.isBlank()) {
+            return sectionRepository.findAllByOrderByNameDesc();
+        }
         return sectionRepository.searchByName(name);
     }
 

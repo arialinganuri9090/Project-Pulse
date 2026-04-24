@@ -79,7 +79,11 @@ const headers = [
   { title: 'Status', key: 'status' }, { title: 'Actions', key: 'actions', sortable: false }
 ]
 
-onMounted(async () => { weeks.value = (await warApi.getWeeks()).data })
+onMounted(async () => {
+  const all = (await warApi.getWeeks()).data
+  const today = new Date()
+  weeks.value = all.filter(w => new Date(w.weekStart) <= today)
+})
 
 async function loadWar() {
   loading.value = true

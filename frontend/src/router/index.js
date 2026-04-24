@@ -37,6 +37,7 @@ const routes = [
       { path: 'war', component: () => import('@/views/student/WarView.vue') },
       { path: 'peer-eval', component: () => import('@/views/student/PeerEvalView.vue') },
       { path: 'my-report', component: () => import('@/views/student/MyReportView.vue') },
+      { path: 'account', component: () => import('@/views/student/AccountView.vue') },
     ]
   },
 

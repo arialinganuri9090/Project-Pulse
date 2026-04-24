@@ -72,10 +72,9 @@ onMounted(async () => {
 
 async function loadEval() {
   error.value = ''
-  // Load team info to get teammates
   try {
-    const teams = (await teamApi.list()).data
-    const myTeam = teams.find(t => t.students?.some(s => s.id === auth.user.id))
+    const myTeamRes = await teamApi.myTeam()
+    const myTeam = myTeamRes.data
     if (!myTeam) { teammates.value = []; return }
     teammates.value = myTeam.students || []
 

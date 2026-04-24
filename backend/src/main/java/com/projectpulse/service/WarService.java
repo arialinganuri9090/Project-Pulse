@@ -30,7 +30,7 @@ public class WarService {
     }
 
     public List<ActiveWeek> getWeeksForStudent(Long studentId) {
-        return activeWeekRepository.findActiveWeeksByStudentId(studentId);
+        return activeWeekRepository.findAllWeeksByStudentId(studentId);
     }
 
     public War getOrCreateWar(Long studentId, Long weekId) {

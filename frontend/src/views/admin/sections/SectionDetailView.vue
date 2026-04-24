@@ -90,6 +90,11 @@ onMounted(async () => {
 })
 
 async function openWeeksDialog() {
+  // If no weeks exist yet, generate them all as active first, then load them
+  if (activeWeeks.value.length === 0) {
+    await sectionApi.setupWeeks(route.params.id, { inactiveWeekStarts: [] })
+    activeWeeks.value = (await sectionApi.getWeeks(route.params.id)).data
+  }
   allWeeks.value = activeWeeks.value
   inactiveWeekStarts.value = activeWeeks.value.filter(w => !w.active).map(w => w.weekStart)
   weeksDialog.value = true

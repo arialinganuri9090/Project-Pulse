@@ -20,6 +20,9 @@ public interface ActiveWeekRepository extends JpaRepository<ActiveWeek, Long> {
     @Query("SELECT aw FROM ActiveWeek aw JOIN Team t ON t.section.id = aw.section.id JOIN t.students s WHERE s.id = :studentId AND aw.active = true ORDER BY aw.weekStart ASC")
     List<ActiveWeek> findActiveWeeksByStudentId(@Param("studentId") Long studentId);
 
+    @Query("SELECT aw FROM ActiveWeek aw JOIN Team t ON t.section.id = aw.section.id JOIN t.students s WHERE s.id = :studentId ORDER BY aw.weekStart ASC")
+    List<ActiveWeek> findAllWeeksByStudentId(@Param("studentId") Long studentId);
+
     @Modifying
     @Query("DELETE FROM ActiveWeek aw WHERE aw.section.id = :sectionId")
     void deleteBySectionId(@Param("sectionId") Long sectionId);

@@ -61,12 +61,10 @@ public class StudentController {
     @PreAuthorize("hasRole('STUDENT')")
     public ResponseEntity<User> updateMyAccount(
             @AuthenticationPrincipal UserDetails userDetails,
-            @RequestParam String firstName,
-            @RequestParam String lastName,
-            @RequestParam String email) {
+            @RequestBody java.util.Map<String, String> body) {
         User me = userRepository.findByEmail(userDetails.getUsername())
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        User updated = userService.updateUser(me.getId(), firstName, lastName, email);
+        User updated = userService.updateUser(me.getId(), body.get("firstName"), body.get("lastName"), body.get("email"));
         return ResponseEntity.ok(updated);
     }
 }

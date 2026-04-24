@@ -12,6 +12,7 @@
         <v-list-item prepend-icon="mdi-clipboard-text" title="Weekly Activity Report" to="/student/war" />
         <v-list-item prepend-icon="mdi-star-check" title="Peer Evaluation" to="/student/peer-eval" />
         <v-list-item prepend-icon="mdi-chart-bar" title="My Report" to="/student/my-report" />
+        <v-list-item prepend-icon="mdi-account-edit" title="My Account" to="/student/account" />
       </v-list>
       <template #append>
         <v-divider />

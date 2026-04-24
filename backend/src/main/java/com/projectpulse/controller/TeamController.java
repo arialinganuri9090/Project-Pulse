@@ -3,11 +3,14 @@ package com.projectpulse.controller;
 import com.projectpulse.dto.request.AssignUsersRequest;
 import com.projectpulse.dto.request.CreateTeamRequest;
 import com.projectpulse.model.Team;
+import com.projectpulse.repository.UserRepository;
 import com.projectpulse.service.TeamService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,10 +20,12 @@ import java.util.List;
 public class TeamController {
 
     private final TeamService teamService;
+    private final UserRepository userRepository;
 
     @Autowired
-    public TeamController(TeamService teamService) {
+    public TeamController(TeamService teamService, UserRepository userRepository) {
         this.teamService = teamService;
+        this.userRepository = userRepository;
     }
 
     @PostMapping
@@ -54,6 +59,16 @@ public class TeamController {
     public ResponseEntity<Void> deleteTeam(@PathVariable Long id) {
         teamService.deleteTeam(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/my-team")
+    @PreAuthorize("hasRole('STUDENT')")
+    public ResponseEntity<Team> getMyTeam(@AuthenticationPrincipal UserDetails userDetails) {
+        Long studentId = userRepository.findByEmail(userDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("User not found")).getId();
+        return teamService.getTeamForStudent(studentId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping("/assign-students")

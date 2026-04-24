@@ -1,5 +1,6 @@
 package com.projectpulse.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -20,6 +21,7 @@ public class Team {
 
     private String websiteUrl;
 
+    @JsonIgnoreProperties({"teams", "activeWeeks"})
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "section_id", nullable = false)
     private Section section;
